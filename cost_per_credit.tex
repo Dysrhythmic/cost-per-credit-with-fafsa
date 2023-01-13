@@ -1,0 +1,69 @@
+\documentclass{article}
+
+\usepackage{titlesec}
+\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{amsmath}
+
+\pgfplotsset{compat=1.18}
+
+\title{Net Cost per Credit with FAFSA}
+\author{Jacob Tucker}
+\begin{document}
+\maketitle
+\vspace{-0.5cm}
+
+Let $c$ be the number of credit hours taken in a semester and $r$ be the money rewarded by FAFSA. Then $f(c,r)$ represents the money rewarded by FAFSA per credit hour taken, $g(c)$ represents the tuition cost per credit hour taken, and $h(c,r)$ represents the net cost per credit hour taken. 
+
+\begin{align}
+  f(c,r) &= \begin{cases}
+      r,  &\text{if } c \geq 12 \\
+      0.75r,  &\text{if } 9 \leq c < 12 \\
+      0.5r,  &\text{if } 6 \leq c < 9 \\
+      0,  &\text{if } c < 6
+    \end{cases} \\
+  g(c) &= \begin{cases}
+    2888.6,  &\text{if } c \geq 12 \\
+    240.717c,  &\text{if } 1 \leq c < 12 \\
+    0,  &\text{if } c < 1 
+    \end{cases} \\
+  h(c,r) &= \begin{cases}
+    \frac{2888.6 - r}{c},  &\text{if } c \geq 12 \\
+    \frac{240.7176c - 0.75r}{c},  &\text{if } 9 \leq c < 12 \\
+    \frac{240.7176c - 0.5r}{c},  &\text{if } 6 \leq c < 9 \\
+    240.7176,  &\text{if } 1 \leq c < 6 \\
+    0,  &\text{if } c < 1
+    \end{cases}
+\end{align}
+The graph of h(c,1000) is as follows: \\ \\
+%f(x) = {(0, x < 1), (240.7176, 1 <= x < 6), ((240.7176 * x - 500) / x, 6 <= x < 9), ((240.7176 * x - 750) / x, 9 <= x < 12), (1888.6 / x, x >= 12)}
+\begin{tikzpicture}
+  \begin{axis}[scale=1.4, domain=0:20, samples=100, ymin=0, ymax=300, xmin=0, xmax=20, axis lines=middle, xtick={1,6,9,12,20}, ytick={20,40,...,260}, xlabel style={at={(axis description cs:1.05,0)},anchor=west}, ylabel style={at={(axis description cs:-0.1,1)},anchor=south}, xlabel=Credit Hours Taken, ylabel=Cost per Credit, clip=false]
+    \addplot[domain=0:1, blue, dashed] {0};
+    \addplot[domain=1:6, blue, dashed] {240.7176};
+    \addplot[domain=6:9, blue, dashed] {(240.7176*x-500)/x};
+    \addplot[domain=9:12, blue, dashed] {(240.7176*x-750)/x};
+    \addplot[domain=12:20, blue, dashed] {1888.6/x};
+    
+    \coordinate (A) at (0,0);
+    \coordinate (B) at (1,0);
+    \coordinate (C) at (1,240.7176);
+    \coordinate (D) at (6,240.7176);
+    \coordinate (E) at (6,157.3843);
+    \coordinate (F) at (9,185.1620);
+    \coordinate (G) at (9,157.3843);
+    \coordinate (H) at (12,178.2176);
+    \coordinate (I) at (12,157.3843);
+    
+    \filldraw[black] (A) circle (2pt);
+    \filldraw[white, draw=black] (B) circle (2pt);
+    \filldraw[black] (C) circle (2pt);
+    \filldraw[white, draw=black] (D) circle (2pt);
+    \filldraw[black] (E) circle (2pt);
+    \filldraw[white, draw=black] (F) circle (2pt);
+    \filldraw[black] (G) circle (2pt);
+    \filldraw[white, draw=black] (H) circle (2pt);
+    \filldraw[black] (I) circle (2pt);
+  \end{axis}
+\end{tikzpicture}
+\end{document}
